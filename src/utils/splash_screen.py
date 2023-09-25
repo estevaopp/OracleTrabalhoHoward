@@ -35,11 +35,9 @@ class SplashScreen:
         #                   SISTEMA DE VENDAS                     
         #                                                         
         #  TOTAL DE REGISTROS:                                    
-        #      1 - PRODUTOS:         {str(self.get_total_produtos()).rjust(5)}
-        #      2 - CLIENTES:         {str(self.get_total_clientes()).rjust(5)}
-        #      3 - FORNECEDORES:     {str(self.get_total_fornecedores()).rjust(5)}
-        #      4 - PEDIDOS:          {str(self.get_total_pedidos()).rjust(5)}
-        #      5 - ITENS DE PEDIDOS: {str(self.get_total_itens_pedidos()).rjust(5)}
+        #      1 - CLIENTES:         {str(self.get_total_clientes()).rjust(5)}
+        #      2 - PEDIDOS:          {str(self.get_total_pedidos()).rjust(5)}
+        #      3 - ITENS DE PEDIDOS: {str(self.get_total_itens_pedidos()).rjust(5)}
         #
         #  CRIADO POR: {self.created_by}
         #
