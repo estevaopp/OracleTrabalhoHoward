@@ -1,4 +1,4 @@
-class Cliente:
+class Paciente:
     def __init__(self, 
                  CPF:str=None, 
                  nome:str=None

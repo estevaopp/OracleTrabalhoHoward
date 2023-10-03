@@ -5,8 +5,8 @@ class SplashScreen:
 
     def __init__(self):
         # Consultas de contagem de registros - inicio
-        self.qry_total_clientes = config.QUERY_COUNT.format(tabela="clientes")
-        self.qry_total_pedidos = config.QUERY_COUNT.format(tabela="pedidos")
+        self.qry_total_pacientes = config.QUERY_COUNT.format(tabela="pacientes")
+        self.qry_total_medicos = config.QUERY_COUNT.format(tabela="medicos")
         # Consultas de contagem de registros - fim
 
         # Nome(s) do(s) criador(es)
@@ -15,19 +15,19 @@ class SplashScreen:
         self.disciplina = "Banco de Dados"
         self.semestre = "2023/2"
 
-    def get_total_clientes(self):
+    def get_total_pacientes(self):
         # Cria uma nova conexão com o banco que permite alteração
         oracle = OracleQueries()
         oracle.connect()
         # Retorna o total de registros computado pela query
-        return oracle.sqlToDataFrame(self.qry_total_clientes)["total_clientes"].values[0]
+        return oracle.sqlToDataFrame(self.qry_total_pacientes)["total_pacientes"].values[0]
 
-    def get_total_pedidos(self):
+    def get_total_medicos(self):
         # Cria uma nova conexão com o banco que permite alteração
         oracle = OracleQueries()
         oracle.connect()
         # Retorna o total de registros computado pela query
-        return oracle.sqlToDataFrame(self.qry_total_pedidos)["total_pedidos"].values[0]
+        return oracle.sqlToDataFrame(self.qry_total_medicos)["total_medicos"].values[0]
 
     def get_updated_screen(self):
         return f"""
@@ -35,9 +35,9 @@ class SplashScreen:
         #                   SISTEMA DE VENDAS                     
         #                                                         
         #  TOTAL DE REGISTROS:                                    
-        #      1 - CLIENTES:         {str(self.get_total_clientes()).rjust(5)}
-        #      2 - PEDIDOS:          {str(self.get_total_pedidos()).rjust(5)}
-        #      3 - ITENS DE PEDIDOS: {str(self.get_total_itens_pedidos()).rjust(5)}
+        #      1 - PACIENTES:         {str(self.get_total_pacientes()).rjust(5)}
+        #      2 - MEDICOS:          {str(self.get_total_medicos()).rjust(5)}
+        #      3 - ITENS DE MEDICOS: {str(self.get_total_itens_medicos()).rjust(5)}
         #
         #  CRIADO POR: {self.created_by}
         #
