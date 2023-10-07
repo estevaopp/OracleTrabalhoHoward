@@ -1,5 +1,5 @@
 from pydoc import cli
-from model.pedidos import Pedido
+from model.agendamentos import Agendamento
 from model.clientes import Cliente
 from controller.controller_cliente import Controller_Cliente
 from model.fornecedores import Fornecedor
@@ -7,25 +7,25 @@ from controller.controller_fornecedor import Controller_Fornecedor
 from conexion.oracle_queries import OracleQueries
 from datetime import date
 
-class Controller_Pedido:
+class Controller_Agendamento:
     def __init__(self):
         self.ctrl_cliente = Controller_Cliente()
         self.ctrl_fornecedor = Controller_Fornecedor()
         
-    def inserir_pedido(self) -> Pedido:
+    def inserir_agendamento(self) -> Agendamento:
         ''' Ref.: https://cx-oracle.readthedocs.io/en/latest/user_guide/plsql_execution.html#anonymous-pl-sql-blocks'''
         
         # Cria uma nova conexão com o banco
         oracle = OracleQueries()
         
-        # Lista os clientes existentes para inserir no pedido
+        # Lista os clientes existentes para inserir no agendamento
         self.listar_clientes(oracle, need_connect=True)
         cpf = str(input("Digite o número do CPF do Cliente: "))
         cliente = self.valida_cliente(oracle, cpf)
         if cliente == None:
             return None
 
-        # Lista os fornecedores existentes para inserir no pedido
+        # Lista os fornecedores existentes para inserir no agendamento
         self.listar_fornecedores(oracle, need_connect=True)
         cnpj = str(input("Digite o número do CNPJ do Fornecedor: "))
         fornecedor = self.valida_fornecedor(oracle, cnpj)
@@ -40,46 +40,46 @@ class Controller_Pedido:
         output_value = cursor.var(int)
 
         # Cria um dicionário para mapear as variáveis de entrada e saída
-        data = dict(codigo=output_value, data_pedido=data_hoje, cpf=cliente.get_CPF(), cnpj=fornecedor.get_CNPJ())
+        data = dict(codigo=output_value, data_agendamento=data_hoje, cpf=cliente.get_CPF(), cnpj=fornecedor.get_CNPJ())
         # Executa o bloco PL/SQL anônimo para inserção do novo produto e recuperação da chave primária criada pela sequence
         cursor.execute("""
         begin
-            :codigo := PEDIDOS_CODIGO_PEDIDO_SEQ.NEXTVAL;
-            insert into pedidos values(:codigo, :data_pedido, :cpf, :cnpj);
+            :codigo := AGENDAMENTOS_CODIGO_AGENDAMENTO_SEQ.NEXTVAL;
+            insert into agendamentos values(:codigo, :data_agendamento, :cpf, :cnpj);
         end;
         """, data)
         # Recupera o código do novo produto
-        codigo_pedido = output_value.getvalue()
+        codigo_agendamento = output_value.getvalue()
         # Persiste (confirma) as alterações
         oracle.conn.commit()
         # Recupera os dados do novo produto criado transformando em um DataFrame
-        df_pedido = oracle.sqlToDataFrame(f"select codigo_pedido, data_pedido from pedidos where codigo_pedido = {codigo_pedido}")
+        df_agendamento = oracle.sqlToDataFrame(f"select codigo_agendamento, data_agendamento from agendamentos where codigo_agendamento = {codigo_agendamento}")
         # Cria um novo objeto Produto
-        novo_pedido = Pedido(df_pedido.codigo_pedido.values[0], df_pedido.data_pedido.values[0], cliente, fornecedor)
+        novo_agendamento = Agendamento(df_agendamento.codigo_agendamento.values[0], df_agendamento.data_agendamento.values[0], cliente, fornecedor)
         # Exibe os atributos do novo produto
-        print(novo_pedido.to_string())
-        # Retorna o objeto novo_pedido para utilização posterior, caso necessário
-        return novo_pedido
+        print(novo_agendamento.to_string())
+        # Retorna o objeto novo_agendamento para utilização posterior, caso necessário
+        return novo_agendamento
 
-    def atualizar_pedido(self) -> Pedido:
+    def atualizar_agendamento(self) -> Agendamento:
         # Cria uma nova conexão com o banco que permite alteração
         oracle = OracleQueries(can_write=True)
         oracle.connect()
 
         # Solicita ao usuário o código do produto a ser alterado
-        codigo_pedido = int(input("Código do Pedido que irá alterar: "))        
+        codigo_agendamento = int(input("Código do Agendamento que irá alterar: "))        
 
         # Verifica se o produto existe na base de dados
-        if not self.verifica_existencia_pedido(oracle, codigo_pedido):
+        if not self.verifica_existencia_agendamento(oracle, codigo_agendamento):
 
-            # Lista os clientes existentes para inserir no pedido
+            # Lista os clientes existentes para inserir no agendamento
             self.listar_clientes(oracle)
             cpf = str(input("Digite o número do CPF do Cliente: "))
             cliente = self.valida_cliente(oracle, cpf)
             if cliente == None:
                 return None
 
-            # Lista os fornecedores existentes para inserir no pedido
+            # Lista os fornecedores existentes para inserir no agendamento
             self.listar_fornecedores(oracle)
             cnpj = str(input("Digite o número do CNPJ do Fornecedor: "))
             fornecedor = self.valida_fornecedor(oracle, cnpj)
@@ -89,55 +89,55 @@ class Controller_Pedido:
             data_hoje = date.today()
 
             # Atualiza a descrição do produto existente
-            oracle.write(f"update pedidos set cpf = '{cliente.get_CPF()}', cnpj = '{fornecedor.get_CNPJ()}', data_pedido = to_date('{data_hoje}','yyyy-mm-dd') where codigo_pedido = {codigo_pedido}")
+            oracle.write(f"update agendamentos set cpf = '{cliente.get_CPF()}', cnpj = '{fornecedor.get_CNPJ()}', data_agendamento = to_date('{data_hoje}','yyyy-mm-dd') where codigo_agendamento = {codigo_agendamento}")
             # Recupera os dados do novo produto criado transformando em um DataFrame
-            df_pedido = oracle.sqlToDataFrame(f"select codigo_pedido, data_pedido from pedidos where codigo_pedido = {codigo_pedido}")
+            df_agendamento = oracle.sqlToDataFrame(f"select codigo_agendamento, data_agendamento from agendamentos where codigo_agendamento = {codigo_agendamento}")
             # Cria um novo objeto Produto
-            pedido_atualizado = Pedido(df_pedido.codigo_pedido.values[0], df_pedido.data_pedido.values[0], cliente, fornecedor)
+            agendamento_atualizado = Agendamento(df_agendamento.codigo_agendamento.values[0], df_agendamento.data_agendamento.values[0], cliente, fornecedor)
             # Exibe os atributos do novo produto
-            print(pedido_atualizado.to_string())
-            # Retorna o objeto pedido_atualizado para utilização posterior, caso necessário
-            return pedido_atualizado
+            print(agendamento_atualizado.to_string())
+            # Retorna o objeto agendamento_atualizado para utilização posterior, caso necessário
+            return agendamento_atualizado
         else:
-            print(f"O código {codigo_pedido} não existe.")
+            print(f"O código {codigo_agendamento} não existe.")
             return None
 
-    def excluir_pedido(self):
+    def excluir_agendamento(self):
         # Cria uma nova conexão com o banco que permite alteração
         oracle = OracleQueries(can_write=True)
         oracle.connect()
 
         # Solicita ao usuário o código do produto a ser alterado
-        codigo_pedido = int(input("Código do Pedido que irá excluir: "))        
+        codigo_agendamento = int(input("Código do Agendamento que irá excluir: "))        
 
         # Verifica se o produto existe na base de dados
-        if not self.verifica_existencia_pedido(oracle, codigo_pedido):            
+        if not self.verifica_existencia_agendamento(oracle, codigo_agendamento):            
             # Recupera os dados do novo produto criado transformando em um DataFrame
-            df_pedido = oracle.sqlToDataFrame(f"select codigo_pedido, data_pedido, cpf, cnpj from pedidos where codigo_pedido = {codigo_pedido}")
-            cliente = self.valida_cliente(oracle, df_pedido.cpf.values[0])
-            fornecedor = self.valida_fornecedor(oracle, df_pedido.cnpj.values[0])
+            df_agendamento = oracle.sqlToDataFrame(f"select codigo_agendamento, data_agendamento, cpf, cnpj from agendamentos where codigo_agendamento = {codigo_agendamento}")
+            cliente = self.valida_cliente(oracle, df_agendamento.cpf.values[0])
+            fornecedor = self.valida_fornecedor(oracle, df_agendamento.cnpj.values[0])
             
-            opcao_excluir = input(f"Tem certeza que deseja excluir o pedido {codigo_pedido} [S ou N]: ")
+            opcao_excluir = input(f"Tem certeza que deseja excluir o agendamento {codigo_agendamento} [S ou N]: ")
             if opcao_excluir.lower() == "s":
-                print("Atenção, caso o pedido possua itens, também serão excluídos!")
-                opcao_excluir = input(f"Tem certeza que deseja excluir o pedido {codigo_pedido} [S ou N]: ")
+                print("Atenção, caso o agendamento possua itens, também serão excluídos!")
+                opcao_excluir = input(f"Tem certeza que deseja excluir o agendamento {codigo_agendamento} [S ou N]: ")
                 if opcao_excluir.lower() == "s":
                     # Revome o produto da tabela
-                    oracle.write(f"delete from itens_pedido where codigo_pedido = {codigo_pedido}")
-                    print("Itens do pedido removidos com sucesso!")
-                    oracle.write(f"delete from pedidos where codigo_pedido = {codigo_pedido}")
+                    oracle.write(f"delete from itens_agendamento where codigo_agendamento = {codigo_agendamento}")
+                    print("Itens do agendamento removidos com sucesso!")
+                    oracle.write(f"delete from agendamentos where codigo_agendamento = {codigo_agendamento}")
                     # Cria um novo objeto Produto para informar que foi removido
-                    pedido_excluido = Pedido(df_pedido.codigo_pedido.values[0], df_pedido.data_pedido.values[0], cliente, fornecedor)
+                    agendamento_excluido = Agendamento(df_agendamento.codigo_agendamento.values[0], df_agendamento.data_agendamento.values[0], cliente, fornecedor)
                     # Exibe os atributos do produto excluído
-                    print("Pedido Removido com Sucesso!")
-                    print(pedido_excluido.to_string())
+                    print("Agendamento Removido com Sucesso!")
+                    print(agendamento_excluido.to_string())
         else:
-            print(f"O código {codigo_pedido} não existe.")
+            print(f"O código {codigo_agendamento} não existe.")
 
-    def verifica_existencia_pedido(self, oracle:OracleQueries, codigo:int=None) -> bool:
-        # Recupera os dados do novo pedido criado transformando em um DataFrame
-        df_pedido = oracle.sqlToDataFrame(f"select codigo_pedido, data_pedido from pedidos where codigo_pedido = {codigo}")
-        return df_pedido.empty
+    def verifica_existencia_agendamento(self, oracle:OracleQueries, codigo:int=None) -> bool:
+        # Recupera os dados do novo agendamento criado transformando em um DataFrame
+        df_agendamento = oracle.sqlToDataFrame(f"select codigo_agendamento, data_agendamento from agendamentos where codigo_agendamento = {codigo}")
+        return df_agendamento.empty
 
     def listar_clientes(self, oracle:OracleQueries, need_connect:bool=False):
         query = """

@@ -3,20 +3,20 @@ from utils.splash_screen import SplashScreen
 from reports.relatorios import Relatorio
 from controller.controller_cliente import Controller_Cliente
 from controller.controller_fornecedor import Controller_Fornecedor
-from controller.controller_pedido import Controller_Pedido
+from controller.controller_agendamento import Controller_Agendamento
 
 tela_inicial = SplashScreen()
 relatorio = Relatorio()
 ctrl_cliente = Controller_Cliente()
 ctrl_fornecedor = Controller_Fornecedor()
-ctrl_pedido = Controller_Pedido()
+ctrl_agendamento = Controller_Agendamento()
 
 def reports(opcao_relatorio:int=0):
 
     if opcao_relatorio == 1:
-        relatorio.get_relatorio_pedidos_por_fornecedor()            
+        relatorio.get_relatorio_agendamentos_por_fornecedor()            
     elif opcao_relatorio == 2:
-        relatorio.get_relatorio_pedidos()
+        relatorio.get_relatorio_agendamentos()
     elif opcao_relatorio == 3:
         relatorio.get_relatorio_clientes()
     elif opcao_relatorio == 4:
@@ -29,7 +29,7 @@ def inserir(opcao_inserir:int=0):
     elif opcao_inserir == 2:
         novo_fornecedor = ctrl_fornecedor.inserir_fornecedor()
     elif opcao_inserir == 3:
-        novo_pedido = ctrl_pedido.inserir_pedido()
+        novo_agendamento = ctrl_agendamento.inserir_agendamento()
 
 def atualizar(opcao_atualizar:int=0):
 
@@ -40,8 +40,8 @@ def atualizar(opcao_atualizar:int=0):
         relatorio.get_relatorio_fornecedores()
         fornecedor_atualizado = ctrl_fornecedor.atualizar_fornecedor()
     elif opcao_atualizar == 3:
-        relatorio.get_relatorio_pedidos()
-        pedido_atualizado = ctrl_pedido.atualizar_pedido()
+        relatorio.get_relatorio_agendamentos()
+        agendamento_atualizado = ctrl_agendamento.atualizar_agendamento()
 
 def excluir(opcao_excluir:int=0):
 
@@ -52,8 +52,8 @@ def excluir(opcao_excluir:int=0):
         relatorio.get_relatorio_fornecedores()
         ctrl_fornecedor.excluir_fornecedor()
     elif opcao_excluir == 3:                
-        relatorio.get_relatorio_pedidos()
-        ctrl_pedido.excluir_pedido()
+        relatorio.get_relatorio_agendamentos()
+        ctrl_agendamento.excluir_agendamento()
 
 def run():
     print(tela_inicial.get_updated_screen())

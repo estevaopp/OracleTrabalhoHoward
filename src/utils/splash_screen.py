@@ -7,7 +7,7 @@ class SplashScreen:
         # Consultas de contagem de registros - inicio
         self.qry_total_clientes = config.QUERY_COUNT.format(tabela="clientes")
         self.qry_total_fornecedores = config.QUERY_COUNT.format(tabela="fornecedores")
-        self.qry_total_pedidos = config.QUERY_COUNT.format(tabela="pedidos")
+        self.qry_total_agendamentos = config.QUERY_COUNT.format(tabela="agendamentos")
         # Consultas de contagem de registros - fim
 
         # Nome(s) do(s) criador(es)
@@ -30,12 +30,12 @@ class SplashScreen:
         # Retorna o total de registros computado pela query
         return oracle.sqlToDataFrame(self.qry_total_fornecedores)["total_fornecedores"].values[0]
 
-    def get_total_pedidos(self):
+    def get_total_agendamentos(self):
         # Cria uma nova conexão com o banco que permite alteração
         oracle = OracleQueries()
         oracle.connect()
         # Retorna o total de registros computado pela query
-        return oracle.sqlToDataFrame(self.qry_total_pedidos)["total_pedidos"].values[0]
+        return oracle.sqlToDataFrame(self.qry_total_agendamentos)["total_agendamentos"].values[0]
 
     def get_updated_screen(self):
         return f"""
@@ -45,7 +45,7 @@ class SplashScreen:
         #  TOTAL DE REGISTROS:                                    
         #      1 - CLIENTES:         {str(self.get_total_clientes()).rjust(5)}
         #      2 - FORNECEDORES:     {str(self.get_total_fornecedores()).rjust(5)}
-        #      3 - PEDIDOS:          {str(self.get_total_pedidos()).rjust(5)}
+        #      3 - AGENDAMENTOS:          {str(self.get_total_agendamentos()).rjust(5)}
         #
         #  CRIADO POR: {self.created_by}
         #
