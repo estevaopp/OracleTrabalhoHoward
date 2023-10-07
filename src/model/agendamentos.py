@@ -1,18 +1,18 @@
 from datetime import date
 from model.pacientes import Paciente
-from model.medicos import Fornecedor
+from model.medicos import Medico
 
 class Agendameto:
     def __init__(self, 
                  codigo_agendamento:int=None,
                  data_agendamento:date=None,
                  paciente:Paciente= None,
-                 fornecedor:Fornecedor=None
+                 medico:Medico=None
                  ):
         self.set_codigo_agendamento(codigo_agendamento)
         self.set_data_agendamento(data_agendamento)
         self.set_paciente(paciente)
-        self.set_fornecedor(fornecedor)
+        self.set_medico(medico)
 
 
     def set_codigo_agendamento(self, codigo_agendamento:int):
@@ -24,8 +24,8 @@ class Agendameto:
     def set_paciente(self, paciente:Paciente):
         self.paciente = paciente
 
-    def set_fornecedor(self, fornecedor:Fornecedor):
-        self.fornecedor = fornecedor
+    def set_medico(self, medico:Medico):
+        self.medico = medico
 
     def get_codigo_agendamento(self) -> int:
         return self.codigo_agendamento
@@ -36,8 +36,8 @@ class Agendameto:
     def get_paciente(self) -> Paciente:
         return self.paciente
 
-    def get_fornecedor(self) -> Fornecedor:
-        return self.fornecedor
+    def get_medico(self) -> Medico:
+        return self.medico
 
     def to_string(self) -> str:
-        return f"Agendameto: {self.get_codigo_agendamento()} | Data: {self.get_data_agendamento()} | Paciente: {self.get_paciente().get_nome()} | Fornecedor: {self.get_fornecedor().get_nome_fantasia()}"
+        return f"Agendameto: {self.get_codigo_agendamento()} | Data: {self.get_data_agendamento()} | Paciente: {self.get_paciente().get_nome()} | Medico: {self.get_medico().get_nome_fantasia()}"

@@ -10,7 +10,7 @@ select p.codigo_agendamento
   from agendamentos p
   inner join pacientes c
   on p.cpf = c.cpf
-  inner join fornecedores f
+  inner join medicos f
   on p.cnpj = f.cnpj
   left join itens_agendamento i
   on p.codigo_agendamento = i.codigo_agendamento

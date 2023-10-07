@@ -2,32 +2,32 @@ from utils import config
 from utils.splash_screen import SplashScreen
 from reports.relatorios import Relatorio
 from controller.controller_paciente import Controller_Paciente
-from controller.controller_medico import Controller_Fornecedor
+from controller.controller_medico import Controller_
 from controller.controller_agendamento import Controller_Agendamento
 
 tela_inicial = SplashScreen()
 relatorio = Relatorio()
 ctrl_paciente = Controller_Paciente()
-ctrl_fornecedor = Controller_Fornecedor()
+ctrl_medico = Controller_()
 ctrl_agendamento = Controller_Agendamento()
 
 def reports(opcao_relatorio:int=0):
 
     if opcao_relatorio == 1:
-        relatorio.get_relatorio_agendamentos_por_fornecedor()            
+        relatorio.get_relatorio_agendamentos_por_medico()            
     elif opcao_relatorio == 2:
         relatorio.get_relatorio_agendamentos()
     elif opcao_relatorio == 3:
         relatorio.get_relatorio_pacientes()
     elif opcao_relatorio == 4:
-        relatorio.get_relatorio_fornecedores()
+        relatorio.get_relatorio_medicos()
 
 def inserir(opcao_inserir:int=0):
 
     if opcao_inserir == 1:                               
         novo_paciente = ctrl_paciente.inserir_paciente()
     elif opcao_inserir == 2:
-        novo_fornecedor = ctrl_fornecedor.inserir_fornecedor()
+        novo_medico = ctrl_medico.inserir_medico()
     elif opcao_inserir == 3:
         novo_agendamento = ctrl_agendamento.inserir_agendamento()
 
@@ -37,8 +37,8 @@ def atualizar(opcao_atualizar:int=0):
         relatorio.get_relatorio_pacientes()
         paciente_atualizado = ctrl_paciente.atualizar_paciente()
     elif opcao_atualizar == 2:
-        relatorio.get_relatorio_fornecedores()
-        fornecedor_atualizado = ctrl_fornecedor.atualizar_fornecedor()
+        relatorio.get_relatorio_medicos()
+        medico_atualizado = ctrl_medico.atualizar_medico()
     elif opcao_atualizar == 3:
         relatorio.get_relatorio_agendamentos()
         agendamento_atualizado = ctrl_agendamento.atualizar_agendamento()
@@ -49,8 +49,8 @@ def excluir(opcao_excluir:int=0):
         relatorio.get_relatorio_pacientes()
         ctrl_paciente.excluir_paciente()
     elif opcao_excluir == 2:                
-        relatorio.get_relatorio_fornecedores()
-        ctrl_fornecedor.excluir_fornecedor()
+        relatorio.get_relatorio_medicos()
+        ctrl_medico.excluir_medico()
     elif opcao_excluir == 3:                
         relatorio.get_relatorio_agendamentos()
         ctrl_agendamento.excluir_agendamento()

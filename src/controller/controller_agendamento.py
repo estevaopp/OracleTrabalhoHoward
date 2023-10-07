@@ -2,15 +2,15 @@ from pydoc import cli
 from model.agendamentos import Agendamento
 from model.pacientes import Paciente
 from controller.controller_paciente import Controller_Paciente
-from model.medicos import Fornecedor
-from controller.controller_medico import Controller_Fornecedor
+from model.medicos import Medico
+from controller.controller_medico import Controller_Medico
 from conexion.oracle_queries import OracleQueries
 from datetime import date
 
 class Controller_Agendamento:
     def __init__(self):
         self.ctrl_paciente = Controller_Paciente()
-        self.ctrl_fornecedor = Controller_Fornecedor()
+        self.ctrl_medico = Controller_Medico()
         
     def inserir_agendamento(self) -> Agendamento:
         ''' Ref.: https://cx-oracle.readthedocs.io/en/latest/user_guide/plsql_execution.html#anonymous-pl-sql-blocks'''
@@ -25,11 +25,11 @@ class Controller_Agendamento:
         if paciente == None:
             return None
 
-        # Lista os fornecedores existentes para inserir no agendamento
-        self.listar_fornecedores(oracle, need_connect=True)
-        cnpj = str(input("Digite o número do CNPJ do Fornecedor: "))
-        fornecedor = self.valida_fornecedor(oracle, cnpj)
-        if fornecedor == None:
+        # Lista os medicos existentes para inserir no agendamento
+        self.listar_medicos(oracle, need_connect=True)
+        cnpj = str(input("Digite o número do CNPJ do Medico: "))
+        medico = self.valida_medico(oracle, cnpj)
+        if medico == None:
             return None
 
         data_hoje = date.today()
@@ -40,7 +40,7 @@ class Controller_Agendamento:
         output_value = cursor.var(int)
 
         # Cria um dicionário para mapear as variáveis de entrada e saída
-        data = dict(codigo=output_value, data_agendamento=data_hoje, cpf=paciente.get_CPF(), cnpj=fornecedor.get_CNPJ())
+        data = dict(codigo=output_value, data_agendamento=data_hoje, cpf=paciente.get_CPF(), cnpj=medico.get_CNPJ())
         # Executa o bloco PL/SQL anônimo para inserção do novo produto e recuperação da chave primária criada pela sequence
         cursor.execute("""
         begin
@@ -55,7 +55,7 @@ class Controller_Agendamento:
         # Recupera os dados do novo produto criado transformando em um DataFrame
         df_agendamento = oracle.sqlToDataFrame(f"select codigo_agendamento, data_agendamento from agendamentos where codigo_agendamento = {codigo_agendamento}")
         # Cria um novo objeto Produto
-        novo_agendamento = Agendamento(df_agendamento.codigo_agendamento.values[0], df_agendamento.data_agendamento.values[0], paciente, fornecedor)
+        novo_agendamento = Agendamento(df_agendamento.codigo_agendamento.values[0], df_agendamento.data_agendamento.values[0], paciente, medico)
         # Exibe os atributos do novo produto
         print(novo_agendamento.to_string())
         # Retorna o objeto novo_agendamento para utilização posterior, caso necessário
@@ -79,21 +79,21 @@ class Controller_Agendamento:
             if paciente == None:
                 return None
 
-            # Lista os fornecedores existentes para inserir no agendamento
-            self.listar_fornecedores(oracle)
-            cnpj = str(input("Digite o número do CNPJ do Fornecedor: "))
-            fornecedor = self.valida_fornecedor(oracle, cnpj)
-            if fornecedor == None:
+            # Lista os medicos existentes para inserir no agendamento
+            self.listar_medicos(oracle)
+            cnpj = str(input("Digite o número do CNPJ do Medico: "))
+            medico = self.valida_medico(oracle, cnpj)
+            if medico == None:
                 return None
 
             data_hoje = date.today()
 
             # Atualiza a descrição do produto existente
-            oracle.write(f"update agendamentos set cpf = '{paciente.get_CPF()}', cnpj = '{fornecedor.get_CNPJ()}', data_agendamento = to_date('{data_hoje}','yyyy-mm-dd') where codigo_agendamento = {codigo_agendamento}")
+            oracle.write(f"update agendamentos set cpf = '{paciente.get_CPF()}', cnpj = '{medico.get_CNPJ()}', data_agendamento = to_date('{data_hoje}','yyyy-mm-dd') where codigo_agendamento = {codigo_agendamento}")
             # Recupera os dados do novo produto criado transformando em um DataFrame
             df_agendamento = oracle.sqlToDataFrame(f"select codigo_agendamento, data_agendamento from agendamentos where codigo_agendamento = {codigo_agendamento}")
             # Cria um novo objeto Produto
-            agendamento_atualizado = Agendamento(df_agendamento.codigo_agendamento.values[0], df_agendamento.data_agendamento.values[0], paciente, fornecedor)
+            agendamento_atualizado = Agendamento(df_agendamento.codigo_agendamento.values[0], df_agendamento.data_agendamento.values[0], paciente, medico)
             # Exibe os atributos do novo produto
             print(agendamento_atualizado.to_string())
             # Retorna o objeto agendamento_atualizado para utilização posterior, caso necessário
@@ -115,7 +115,7 @@ class Controller_Agendamento:
             # Recupera os dados do novo produto criado transformando em um DataFrame
             df_agendamento = oracle.sqlToDataFrame(f"select codigo_agendamento, data_agendamento, cpf, cnpj from agendamentos where codigo_agendamento = {codigo_agendamento}")
             paciente = self.valida_paciente(oracle, df_agendamento.cpf.values[0])
-            fornecedor = self.valida_fornecedor(oracle, df_agendamento.cnpj.values[0])
+            medico = self.valida_medico(oracle, df_agendamento.cnpj.values[0])
             
             opcao_excluir = input(f"Tem certeza que deseja excluir o agendamento {codigo_agendamento} [S ou N]: ")
             if opcao_excluir.lower() == "s":
@@ -127,7 +127,7 @@ class Controller_Agendamento:
                     print("Itens do agendamento removidos com sucesso!")
                     oracle.write(f"delete from agendamentos where codigo_agendamento = {codigo_agendamento}")
                     # Cria um novo objeto Produto para informar que foi removido
-                    agendamento_excluido = Agendamento(df_agendamento.codigo_agendamento.values[0], df_agendamento.data_agendamento.values[0], paciente, fornecedor)
+                    agendamento_excluido = Agendamento(df_agendamento.codigo_agendamento.values[0], df_agendamento.data_agendamento.values[0], paciente, medico)
                     # Exibe os atributos do produto excluído
                     print("Agendamento Removido com Sucesso!")
                     print(agendamento_excluido.to_string())
@@ -150,12 +150,12 @@ class Controller_Agendamento:
             oracle.connect()
         print(oracle.sqlToDataFrame(query))
 
-    def listar_fornecedores(self, oracle:OracleQueries, need_connect:bool=False):
+    def listar_medicos(self, oracle:OracleQueries, need_connect:bool=False):
         query = """
                 select f.cnpj
                     , f.razao_social
                     , f.nome_fantasia
-                from fornecedores f
+                from medicos f
                 order by f.nome_fantasia
                 """
         if need_connect:
@@ -174,14 +174,14 @@ class Controller_Agendamento:
             paciente = Paciente(df_paciente.cpf.values[0], df_paciente.nome.values[0])
             return paciente
 
-    def valida_fornecedor(self, oracle:OracleQueries, cnpj:str=None) -> Fornecedor:
-        if self.ctrl_fornecedor.verifica_existencia_fornecedor(oracle, cnpj):
+    def valida_medico(self, oracle:OracleQueries, cnpj:str=None) -> Medico:
+        if self.ctrl_medico.verifica_existencia_medico(oracle, cnpj):
             print(f"O CNPJ {cnpj} informado não existe na base.")
             return None
         else:
             oracle.connect()
-            # Recupera os dados do novo fornecedor criado transformando em um DataFrame
-            df_fornecedor = oracle.sqlToDataFrame(f"select cnpj, razao_social, nome_fantasia from fornecedores where cnpj = {cnpj}")
-            # Cria um novo objeto fornecedor
-            fornecedor = Fornecedor(df_fornecedor.cnpj.values[0], df_fornecedor.razao_social.values[0], df_fornecedor.nome_fantasia.values[0])
-            return fornecedor
+            # Recupera os dados do novo medico criado transformando em um DataFrame
+            df_medico = oracle.sqlToDataFrame(f"select cnpj, razao_social, nome_fantasia from medicos where cnpj = {cnpj}")
+            # Cria um novo objeto medico
+            medico = Medico(df_medico.cnpj.values[0], df_medico.razao_social.values[0], df_medico.nome_fantasia.values[0])
+            return medico

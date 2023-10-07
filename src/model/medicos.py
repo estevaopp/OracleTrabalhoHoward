@@ -1,4 +1,4 @@
-class Fornecedor:
+class Medico:
     def __init__(self, 
                  CNPJ:str=None, 
                  razao_social:str=None, 

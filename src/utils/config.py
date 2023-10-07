@@ -7,16 +7,16 @@ MENU_PRINCIPAL = """Menu Principal
 """
 
 MENU_RELATORIOS = """Relatórios
-1 - Relatório de Agendamentos por Fornecedores
+1 - Relatório de Agendamentos por Medicos
 2 - Relatório de Agendamentos
 3 - Relatório de Pacientes
-4 - Relatório de Fornecedores
+4 - Relatório de Medicos
 0 - Sair
 """
 
 MENU_ENTIDADES = """Entidades
 1 - PACIENTES
-2 - FORNECEDORES
+2 - MEDICOS
 3 - AGENDAMENTOS
 """
 

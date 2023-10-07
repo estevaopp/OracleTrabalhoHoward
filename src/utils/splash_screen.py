@@ -6,7 +6,7 @@ class SplashScreen:
     def __init__(self):
         # Consultas de contagem de registros - inicio
         self.qry_total_pacientes = config.QUERY_COUNT.format(tabela="pacientes")
-        self.qry_total_fornecedores = config.QUERY_COUNT.format(tabela="fornecedores")
+        self.qry_total_medicos = config.QUERY_COUNT.format(tabela="medicos")
         self.qry_total_agendamentos = config.QUERY_COUNT.format(tabela="agendamentos")
         # Consultas de contagem de registros - fim
 
@@ -23,12 +23,12 @@ class SplashScreen:
         # Retorna o total de registros computado pela query
         return oracle.sqlToDataFrame(self.qry_total_pacientes)["total_pacientes"].values[0]
 
-    def get_total_fornecedores(self):
+    def get_total_medicos(self):
         # Cria uma nova conexão com o banco que permite alteração
         oracle = OracleQueries()
         oracle.connect()
         # Retorna o total de registros computado pela query
-        return oracle.sqlToDataFrame(self.qry_total_fornecedores)["total_fornecedores"].values[0]
+        return oracle.sqlToDataFrame(self.qry_total_medicos)["total_medicos"].values[0]
 
     def get_total_agendamentos(self):
         # Cria uma nova conexão com o banco que permite alteração
@@ -44,7 +44,7 @@ class SplashScreen:
         #                                                         
         #  TOTAL DE REGISTROS:                                    
         #      1 - PACIENTES:         {str(self.get_total_pacientes()).rjust(5)}
-        #      2 - FORNECEDORES:     {str(self.get_total_fornecedores()).rjust(5)}
+        #      2 - MEDICOS:     {str(self.get_total_medicos()).rjust(5)}
         #      3 - AGENDAMENTOS:          {str(self.get_total_agendamentos()).rjust(5)}
         #
         #  CRIADO POR: {self.created_by}

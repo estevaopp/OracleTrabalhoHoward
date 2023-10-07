@@ -11,7 +11,7 @@ select nvl(f.nome_fantasia, f.razao_social) as empresa
   from agendamentos p
   inner join sumariza_agendamentos sp
   on p.cnpj = sp.cnpj
-  inner join fornecedores f
+  inner join medicos f
   on p.cnpj = f.cnpj
   inner join itens_agendamento i
   on p.codigo_agendamento = i.codigo_agendamento
