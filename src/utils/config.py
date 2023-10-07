@@ -7,15 +7,21 @@ MENU_PRINCIPAL = """Menu Principal
 """
 
 MENU_RELATORIOS = """Relatórios
-1 - Relatório de Medicos por Fornecedores
-2 - Relatório de Medicos
-3 - Relatório de Pacientes
+1 - Relatório de Pedidos por Fornecedores
+2 - Relatório de Pedidos
+3 - Relatório de Produtos
+4 - Relatório de Clientes
+5 - Relatório de Fornecedores
+6 - Relatório de Itens de Pedidos
 0 - Sair
 """
 
 MENU_ENTIDADES = """Entidades
-1 - PACIENTES
-2 - MEDICO
+1 - PRODUTOS
+2 - CLIENTES
+3 - FORNECEDORES
+4 - PEDIDOS
+5 - ITENS DE PEDIDOS
 """
 
 # Consulta de contagem de registros por tabela

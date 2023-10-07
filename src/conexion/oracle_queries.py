@@ -1,5 +1,5 @@
 ###########################################################################
-# Author: Alunos baseado no programa do professor Howard Roatti
+# Author: Howard Roatti
 # Created: 02/09/2022
 # Last Update: 03/09/2022
 #
