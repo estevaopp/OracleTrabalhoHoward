@@ -1,4 +1,4 @@
 select c.cpf
      , c.nome 
-  from clientes c
+  from pacientes c
  order by c.nome

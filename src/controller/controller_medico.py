@@ -1,4 +1,4 @@
-from model.fornecedores import Fornecedor
+from model.medicos import Fornecedor
 from conexion.oracle_queries import OracleQueries
 
 class Controller_Fornecedor:

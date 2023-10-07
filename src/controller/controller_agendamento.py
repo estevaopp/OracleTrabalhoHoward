@@ -1,15 +1,15 @@
 from pydoc import cli
 from model.agendamentos import Agendamento
-from model.clientes import Cliente
-from controller.controller_cliente import Controller_Cliente
-from model.fornecedores import Fornecedor
-from controller.controller_fornecedor import Controller_Fornecedor
+from model.pacientes import Paciente
+from controller.controller_paciente import Controller_Paciente
+from model.medicos import Fornecedor
+from controller.controller_medico import Controller_Fornecedor
 from conexion.oracle_queries import OracleQueries
 from datetime import date
 
 class Controller_Agendamento:
     def __init__(self):
-        self.ctrl_cliente = Controller_Cliente()
+        self.ctrl_paciente = Controller_Paciente()
         self.ctrl_fornecedor = Controller_Fornecedor()
         
     def inserir_agendamento(self) -> Agendamento:
@@ -18,11 +18,11 @@ class Controller_Agendamento:
         # Cria uma nova conexão com o banco
         oracle = OracleQueries()
         
-        # Lista os clientes existentes para inserir no agendamento
-        self.listar_clientes(oracle, need_connect=True)
-        cpf = str(input("Digite o número do CPF do Cliente: "))
-        cliente = self.valida_cliente(oracle, cpf)
-        if cliente == None:
+        # Lista os pacientes existentes para inserir no agendamento
+        self.listar_pacientes(oracle, need_connect=True)
+        cpf = str(input("Digite o número do CPF do Paciente: "))
+        paciente = self.valida_paciente(oracle, cpf)
+        if paciente == None:
             return None
 
         # Lista os fornecedores existentes para inserir no agendamento
@@ -40,7 +40,7 @@ class Controller_Agendamento:
         output_value = cursor.var(int)
 
         # Cria um dicionário para mapear as variáveis de entrada e saída
-        data = dict(codigo=output_value, data_agendamento=data_hoje, cpf=cliente.get_CPF(), cnpj=fornecedor.get_CNPJ())
+        data = dict(codigo=output_value, data_agendamento=data_hoje, cpf=paciente.get_CPF(), cnpj=fornecedor.get_CNPJ())
         # Executa o bloco PL/SQL anônimo para inserção do novo produto e recuperação da chave primária criada pela sequence
         cursor.execute("""
         begin
@@ -55,7 +55,7 @@ class Controller_Agendamento:
         # Recupera os dados do novo produto criado transformando em um DataFrame
         df_agendamento = oracle.sqlToDataFrame(f"select codigo_agendamento, data_agendamento from agendamentos where codigo_agendamento = {codigo_agendamento}")
         # Cria um novo objeto Produto
-        novo_agendamento = Agendamento(df_agendamento.codigo_agendamento.values[0], df_agendamento.data_agendamento.values[0], cliente, fornecedor)
+        novo_agendamento = Agendamento(df_agendamento.codigo_agendamento.values[0], df_agendamento.data_agendamento.values[0], paciente, fornecedor)
         # Exibe os atributos do novo produto
         print(novo_agendamento.to_string())
         # Retorna o objeto novo_agendamento para utilização posterior, caso necessário
@@ -72,11 +72,11 @@ class Controller_Agendamento:
         # Verifica se o produto existe na base de dados
         if not self.verifica_existencia_agendamento(oracle, codigo_agendamento):
 
-            # Lista os clientes existentes para inserir no agendamento
-            self.listar_clientes(oracle)
-            cpf = str(input("Digite o número do CPF do Cliente: "))
-            cliente = self.valida_cliente(oracle, cpf)
-            if cliente == None:
+            # Lista os pacientes existentes para inserir no agendamento
+            self.listar_pacientes(oracle)
+            cpf = str(input("Digite o número do CPF do Paciente: "))
+            paciente = self.valida_paciente(oracle, cpf)
+            if paciente == None:
                 return None
 
             # Lista os fornecedores existentes para inserir no agendamento
@@ -89,11 +89,11 @@ class Controller_Agendamento:
             data_hoje = date.today()
 
             # Atualiza a descrição do produto existente
-            oracle.write(f"update agendamentos set cpf = '{cliente.get_CPF()}', cnpj = '{fornecedor.get_CNPJ()}', data_agendamento = to_date('{data_hoje}','yyyy-mm-dd') where codigo_agendamento = {codigo_agendamento}")
+            oracle.write(f"update agendamentos set cpf = '{paciente.get_CPF()}', cnpj = '{fornecedor.get_CNPJ()}', data_agendamento = to_date('{data_hoje}','yyyy-mm-dd') where codigo_agendamento = {codigo_agendamento}")
             # Recupera os dados do novo produto criado transformando em um DataFrame
             df_agendamento = oracle.sqlToDataFrame(f"select codigo_agendamento, data_agendamento from agendamentos where codigo_agendamento = {codigo_agendamento}")
             # Cria um novo objeto Produto
-            agendamento_atualizado = Agendamento(df_agendamento.codigo_agendamento.values[0], df_agendamento.data_agendamento.values[0], cliente, fornecedor)
+            agendamento_atualizado = Agendamento(df_agendamento.codigo_agendamento.values[0], df_agendamento.data_agendamento.values[0], paciente, fornecedor)
             # Exibe os atributos do novo produto
             print(agendamento_atualizado.to_string())
             # Retorna o objeto agendamento_atualizado para utilização posterior, caso necessário
@@ -114,7 +114,7 @@ class Controller_Agendamento:
         if not self.verifica_existencia_agendamento(oracle, codigo_agendamento):            
             # Recupera os dados do novo produto criado transformando em um DataFrame
             df_agendamento = oracle.sqlToDataFrame(f"select codigo_agendamento, data_agendamento, cpf, cnpj from agendamentos where codigo_agendamento = {codigo_agendamento}")
-            cliente = self.valida_cliente(oracle, df_agendamento.cpf.values[0])
+            paciente = self.valida_paciente(oracle, df_agendamento.cpf.values[0])
             fornecedor = self.valida_fornecedor(oracle, df_agendamento.cnpj.values[0])
             
             opcao_excluir = input(f"Tem certeza que deseja excluir o agendamento {codigo_agendamento} [S ou N]: ")
@@ -127,7 +127,7 @@ class Controller_Agendamento:
                     print("Itens do agendamento removidos com sucesso!")
                     oracle.write(f"delete from agendamentos where codigo_agendamento = {codigo_agendamento}")
                     # Cria um novo objeto Produto para informar que foi removido
-                    agendamento_excluido = Agendamento(df_agendamento.codigo_agendamento.values[0], df_agendamento.data_agendamento.values[0], cliente, fornecedor)
+                    agendamento_excluido = Agendamento(df_agendamento.codigo_agendamento.values[0], df_agendamento.data_agendamento.values[0], paciente, fornecedor)
                     # Exibe os atributos do produto excluído
                     print("Agendamento Removido com Sucesso!")
                     print(agendamento_excluido.to_string())
@@ -139,11 +139,11 @@ class Controller_Agendamento:
         df_agendamento = oracle.sqlToDataFrame(f"select codigo_agendamento, data_agendamento from agendamentos where codigo_agendamento = {codigo}")
         return df_agendamento.empty
 
-    def listar_clientes(self, oracle:OracleQueries, need_connect:bool=False):
+    def listar_pacientes(self, oracle:OracleQueries, need_connect:bool=False):
         query = """
                 select c.cpf
                     , c.nome 
-                from clientes c
+                from pacientes c
                 order by c.nome
                 """
         if need_connect:
@@ -162,17 +162,17 @@ class Controller_Agendamento:
             oracle.connect()
         print(oracle.sqlToDataFrame(query))
 
-    def valida_cliente(self, oracle:OracleQueries, cpf:str=None) -> Cliente:
-        if self.ctrl_cliente.verifica_existencia_cliente(oracle, cpf):
+    def valida_paciente(self, oracle:OracleQueries, cpf:str=None) -> Paciente:
+        if self.ctrl_paciente.verifica_existencia_paciente(oracle, cpf):
             print(f"O CPF {cpf} informado não existe na base.")
             return None
         else:
             oracle.connect()
-            # Recupera os dados do novo cliente criado transformando em um DataFrame
-            df_cliente = oracle.sqlToDataFrame(f"select cpf, nome from clientes where cpf = {cpf}")
-            # Cria um novo objeto cliente
-            cliente = Cliente(df_cliente.cpf.values[0], df_cliente.nome.values[0])
-            return cliente
+            # Recupera os dados do novo paciente criado transformando em um DataFrame
+            df_paciente = oracle.sqlToDataFrame(f"select cpf, nome from pacientes where cpf = {cpf}")
+            # Cria um novo objeto paciente
+            paciente = Paciente(df_paciente.cpf.values[0], df_paciente.nome.values[0])
+            return paciente
 
     def valida_fornecedor(self, oracle:OracleQueries, cnpj:str=None) -> Fornecedor:
         if self.ctrl_fornecedor.verifica_existencia_fornecedor(oracle, cnpj):

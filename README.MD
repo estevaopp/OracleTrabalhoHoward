@@ -1,6 +1,6 @@
 # Exemplo de Sistema em Python fazendo CRUD no Oracle
 
-Esse sistema de exemplo é composto por um conjunto de tabelas que representam agendamentos de vendas, contendo tabelas como: clientes, fornecedores, produtos, agendamentos e itens de agendamento.
+Esse sistema de exemplo é composto por um conjunto de tabelas que representam agendamentos de vendas, contendo tabelas como: pacientes, medicos, produtos, agendamentos e itens de agendamento.
 
 O sistema exige que as tabelas existam, então basta executar o script Python a seguir para criação das tabelas e preenchimento de dados de exemplos:
 ```shell
@@ -19,7 +19,7 @@ Para que possa testar as conexões com o banco de dados Oracle e o módulo Conex
 
 ## Organização
 - [diagrams](diagrams): Nesse diretório está o [diagrama relacional](diagrams/DIAGRAMA_RELACIONAL_AGENDAMENTOS.pdf) (lógico) do sistema.
-    * O sistema possui cinco entidades: PRODUTOS, CLIENTES, FORNECEDORES, AGENDAMENTOS e ITENS_AGENDAMENTO
+    * O sistema possui cinco entidades: PRODUTOS, PACIENTES, MEDICOS, AGENDAMENTOS e ITENS_AGENDAMENTO
 - [sql](sql): Nesse diretório estão os scripts para criação das tabelas e inserção de dados fictícios para testes do sistema
     * Certifique-se de que o usuário do banco possui todos os privilégios antes de executar os scripts de criação, caso ocorra erro, execute o comando a seguir com o superusuário via SQL Developer: `GRANT ALL PRIVILEGES TO LABDATABASE;`
     * [create_tables_agendamentos.sql](sql/create_tables_agendamentos.sql): script responsável pela criação das tabelas, relacionamentos e criação de permissão no esquema LabDatabase.
@@ -30,11 +30,11 @@ Para que possa testar as conexões com o banco de dados Oracle e o módulo Conex
       - Exemplo de utilização para consultas simples:
 
         ```python
-        def listar_clientes(self, oracle:OracleQueries, need_connect:bool=False):
+        def listar_pacientes(self, oracle:OracleQueries, need_connect:bool=False):
             query = """
                     select c.cpf
                         , c.nome 
-                    from clientes c
+                    from pacientes c
                     order by c.nome
                     """
             if need_connect:
@@ -45,7 +45,7 @@ Para que possa testar as conexões com o banco de dados Oracle e o módulo Conex
 
         ```python
         from conexion.oracle_queries import OracleQueries
-        def inserir_cliente(self) -> Cliente:
+        def inserir_paciente(self) -> Paciente:
             # Cria uma nova conexão com o banco que permite alteração
             oracle = OracleQueries(can_write=True)
             oracle.connect()
@@ -53,19 +53,19 @@ Para que possa testar as conexões com o banco de dados Oracle e o módulo Conex
             # Solicita ao usuario o novo CPF
             cpf = input("CPF (Novo): ")
 
-            if self.verifica_existencia_cliente(oracle, cpf):
+            if self.verifica_existencia_paciente(oracle, cpf):
                 # Solicita ao usuario o novo nome
                 nome = input("Nome (Novo): ")
-                # Insere e persiste o novo cliente
-                oracle.write(f"insert into clientes values ('{cpf}', '{nome}')")
-                # Recupera os dados do novo cliente criado transformando em um DataFrame
-                df_cliente = oracle.sqlToDataFrame(f"select cpf, nome from clientes where cpf = '{cpf}'")
-                # Cria um novo objeto Cliente
-                novo_cliente = Cliente(df_cliente.cpf.values[0], df_cliente.nome.values[0])
-                # Exibe os atributos do novo cliente
-                print(novo_cliente.to_string())
-                # Retorna o objeto novo_cliente para utilização posterior, caso necessário
-                return novo_cliente
+                # Insere e persiste o novo paciente
+                oracle.write(f"insert into pacientes values ('{cpf}', '{nome}')")
+                # Recupera os dados do novo paciente criado transformando em um DataFrame
+                df_paciente = oracle.sqlToDataFrame(f"select cpf, nome from pacientes where cpf = '{cpf}'")
+                # Cria um novo objeto Paciente
+                novo_paciente = Paciente(df_paciente.cpf.values[0], df_paciente.nome.values[0])
+                # Exibe os atributos do novo paciente
+                print(novo_paciente.to_string())
+                # Retorna o objeto novo_paciente para utilização posterior, caso necessário
+                return novo_paciente
             else:
                 print(f"O CPF {cpf} já está cadastrado.")
                 return None

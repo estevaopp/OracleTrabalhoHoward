@@ -9,13 +9,13 @@ MENU_PRINCIPAL = """Menu Principal
 MENU_RELATORIOS = """Relatórios
 1 - Relatório de Agendamentos por Fornecedores
 2 - Relatório de Agendamentos
-3 - Relatório de Clientes
+3 - Relatório de Pacientes
 4 - Relatório de Fornecedores
 0 - Sair
 """
 
 MENU_ENTIDADES = """Entidades
-1 - CLIENTES
+1 - PACIENTES
 2 - FORNECEDORES
 3 - AGENDAMENTOS
 """

@@ -11,8 +11,8 @@ class Relatorio:
             self.query_relatorio_agendamentos_por_fornecedor = f.read()
 
         # Abre o arquivo com a consulta e associa a um atributo da classe
-        with open("sql/relatorio_clientes.sql") as f:
-            self.query_relatorio_clientes = f.read()
+        with open("sql/relatorio_pacientes.sql") as f:
+            self.query_relatorio_pacientes = f.read()
 
         # Abre o arquivo com a consulta e associa a um atributo da classe
         with open("sql/relatorio_fornecedores.sql") as f:
@@ -34,13 +34,13 @@ class Relatorio:
         print(oracle.sqlToDataFrame(self.query_relatorio_agendamentos_por_fornecedor))
         input("Pressione Enter para Sair do Relatório de Fornecedores")
 
-    def get_relatorio_clientes(self):
+    def get_relatorio_pacientes(self):
         # Cria uma nova conexão com o banco que permite alteração
         oracle = OracleQueries()
         oracle.connect()
         # Recupera os dados transformando em um DataFrame
-        print(oracle.sqlToDataFrame(self.query_relatorio_clientes))
-        input("Pressione Enter para Sair do Relatório de Clientes")
+        print(oracle.sqlToDataFrame(self.query_relatorio_pacientes))
+        input("Pressione Enter para Sair do Relatório de Pacientes")
 
     def get_relatorio_fornecedores(self):
         # Cria uma nova conexão com o banco que permite alteração
