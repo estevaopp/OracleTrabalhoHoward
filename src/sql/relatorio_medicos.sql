@@ -1,5 +1,4 @@
-select f.cnpj
-       , f.razao_social
-       , f.nome_fantasia
+select f.CRM
+       , f.nome
   from medicos f
- order by f.nome_fantasia
+ order by f.nome

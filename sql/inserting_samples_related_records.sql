@@ -7,7 +7,7 @@ BEGIN
   INSERT INTO LABDATABASE.AGENDAMENTOS VALUES(VCOD_AGENDAMENTO,    /*CODIGO_AGENDAMENTO*/
                              SYSDATE,        /*DATA_AGENDAMENTO*/
                              '43201234567',  /*CPF*/
-                             '01234567891234'/*CNPJ*/
+                             '12855579797'/*CNPJ*/
                              );
 
 END;
@@ -20,7 +20,7 @@ BEGIN
   INSERT INTO LABDATABASE.AGENDAMENTOS VALUES(VCOD_AGENDAMENTO,    /*CODIGO_AGENDAMENTO*/
                              SYSDATE,        /*DATA_AGENDAMENTO*/
                              '01234567891',  /*CPF*/
-                             '01234567891234'/*CNPJ*/
+                             '012345678912'/*CNPJ*/
                              );
 END;
 --
@@ -34,7 +34,7 @@ BEGIN
   INSERT INTO LABDATABASE.AGENDAMENTOS VALUES(VCOD_AGENDAMENTO,    /*CODIGO_AGENDAMENTO*/
                              SYSDATE,        /*DATA_AGENDAMENTO*/
                              '87654320123',  /*CPF*/
-                             '01234567891234'/*CNPJ*/
+                             '12855579796'/*CNPJ*/
                              );
   
 END;
@@ -49,7 +49,7 @@ BEGIN
   INSERT INTO LABDATABASE.AGENDAMENTOS VALUES(VCOD_AGENDAMENTO,    /*CODIGO_AGENDAMENTO*/
                              SYSDATE,        /*DATA_AGENDAMENTO*/
                              '32012345678',  /*CPF*/
-                             '00001234567891'/*CNPJ*/
+                             '12855579795'/*CNPJ*/
                              );
                                   
 END;
@@ -64,7 +64,7 @@ BEGIN
   INSERT INTO LABDATABASE.AGENDAMENTOS VALUES(VCOD_AGENDAMENTO,    /*CODIGO_AGENDAMENTO*/
                              SYSDATE,        /*DATA_AGENDAMENTO*/
                              '76543201234',  /*CPF*/
-                             '00012345678912'/*CNPJ*/
+                             '12855579794'/*CNPJ*/
                              );
                                   
 END;

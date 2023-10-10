@@ -1,30 +1,22 @@
 class Medico:
     def __init__(self, 
-                 CNPJ:str=None, 
-                 razao_social:str=None, 
-                 nome_fantasia:str=None
+                 CRM:str=None,
+                 nome:str=None
                  ):
-        self.set_CNPJ(CNPJ)
-        self.set_razao_social(razao_social)
-        self.set_nome_fantasia(nome_fantasia)
+        self.set_CRM(CRM)
+        self.set_nome(nome)
 
-    def set_CNPJ(self, CNPJ:str):
-        self.CNPJ = CNPJ
+    def set_CRM(self, CRM:str):
+        self.CRM = CRM
 
-    def set_razao_social(self, razao_social:str):
-        self.razao_social = razao_social
+    def set_nome(self, nome:str):
+        self.nome = nome
 
-    def set_nome_fantasia(self, nome_fantasia:str):
-        self.nome_fantasia = nome_fantasia
+    def get_CRM(self) -> str:
+        return self.CRM
 
-    def get_CNPJ(self) -> str:
-        return self.CNPJ
-
-    def get_razao_social(self) -> str:
-        return self.razao_social
-
-    def get_nome_fantasia(self) -> str:
-        return self.nome_fantasia
+    def get_nome(self) -> str:
+        return self.nome
 
     def to_string(self) -> str:
-        return f"CNPJ: {self.get_CNPJ()} | Razão Social: {self.get_razao_social()} | Nome Fantasia: {self.get_nome_fantasia()}"
+        return f"CRM: {self.get_CRM()} | Nome: {self.get_nome()}"

@@ -40,4 +40,4 @@ class Agendameto:
         return self.medico
 
     def to_string(self) -> str:
-        return f"Agendameto: {self.get_codigo_agendamento()} | Data: {self.get_data_agendamento()} | Paciente: {self.get_paciente().get_nome()} | Medico: {self.get_medico().get_nome_fantasia()}"
+        return f"Agendameto: {self.get_codigo_agendamento()} | Data: {self.get_data_agendamento()} | Paciente: {self.get_paciente().get_nome()} | Medico: {self.get_medico().get_nome()}"

@@ -27,8 +27,8 @@ class Controller_Agendamento:
 
         # Lista os medicos existentes para inserir no agendamento
         self.listar_medicos(oracle, need_connect=True)
-        cnpj = str(input("Digite o número do CNPJ do Medico: "))
-        medico = self.valida_medico(oracle, cnpj)
+        crm = str(input("Digite o número do CRM do Medico: "))
+        medico = self.valida_medico(oracle, crm)
         if medico == None:
             return None
 
@@ -40,12 +40,12 @@ class Controller_Agendamento:
         output_value = cursor.var(int)
 
         # Cria um dicionário para mapear as variáveis de entrada e saída
-        data = dict(codigo=output_value, data_agendamento=data_hoje, cpf=paciente.get_CPF(), cnpj=medico.get_CNPJ())
+        data = dict(codigo=output_value, data_agendamento=data_hoje, cpf=paciente.get_CPF(), crm=medico.get_CRM())
         # Executa o bloco PL/SQL anônimo para inserção do novo produto e recuperação da chave primária criada pela sequence
         cursor.execute("""
         begin
             :codigo := AGENDAMENTOS_CODIGO_AGENDAMENTO_SEQ.NEXTVAL;
-            insert into agendamentos values(:codigo, :data_agendamento, :cpf, :cnpj);
+            insert into agendamentos values(:codigo, :data_agendamento, :cpf, :crm);
         end;
         """, data)
         # Recupera o código do novo produto
@@ -81,15 +81,15 @@ class Controller_Agendamento:
 
             # Lista os medicos existentes para inserir no agendamento
             self.listar_medicos(oracle)
-            cnpj = str(input("Digite o número do CNPJ do Medico: "))
-            medico = self.valida_medico(oracle, cnpj)
+            crm = str(input("Digite o número do CRM do Medico: "))
+            medico = self.valida_medico(oracle, crm)
             if medico == None:
                 return None
 
             data_hoje = date.today()
 
             # Atualiza a descrição do produto existente
-            oracle.write(f"update agendamentos set cpf = '{paciente.get_CPF()}', cnpj = '{medico.get_CNPJ()}', data_agendamento = to_date('{data_hoje}','yyyy-mm-dd') where codigo_agendamento = {codigo_agendamento}")
+            oracle.write(f"update agendamentos set cpf = '{paciente.get_CPF()}', crm = '{medico.get_CRM()}', data_agendamento = to_date('{data_hoje}','yyyy-mm-dd') where codigo_agendamento = {codigo_agendamento}")
             # Recupera os dados do novo produto criado transformando em um DataFrame
             df_agendamento = oracle.sqlToDataFrame(f"select codigo_agendamento, data_agendamento from agendamentos where codigo_agendamento = {codigo_agendamento}")
             # Cria um novo objeto Produto
@@ -113,9 +113,9 @@ class Controller_Agendamento:
         # Verifica se o produto existe na base de dados
         if not self.verifica_existencia_agendamento(oracle, codigo_agendamento):            
             # Recupera os dados do novo produto criado transformando em um DataFrame
-            df_agendamento = oracle.sqlToDataFrame(f"select codigo_agendamento, data_agendamento, cpf, cnpj from agendamentos where codigo_agendamento = {codigo_agendamento}")
+            df_agendamento = oracle.sqlToDataFrame(f"select codigo_agendamento, data_agendamento, cpf, crm from agendamentos where codigo_agendamento = {codigo_agendamento}")
             paciente = self.valida_paciente(oracle, df_agendamento.cpf.values[0])
-            medico = self.valida_medico(oracle, df_agendamento.cnpj.values[0])
+            medico = self.valida_medico(oracle, df_agendamento.crm.values[0])
             
             opcao_excluir = input(f"Tem certeza que deseja excluir o agendamento {codigo_agendamento} [S ou N]: ")
             if opcao_excluir.lower() == "s":
@@ -152,11 +152,10 @@ class Controller_Agendamento:
 
     def listar_medicos(self, oracle:OracleQueries, need_connect:bool=False):
         query = """
-                select f.cnpj
-                    , f.razao_social
-                    , f.nome_fantasia
+                select f.crm
+                    , f.nome
                 from medicos f
-                order by f.nome_fantasia
+                order by f.nome
                 """
         if need_connect:
             oracle.connect()
@@ -174,14 +173,14 @@ class Controller_Agendamento:
             paciente = Paciente(df_paciente.cpf.values[0], df_paciente.nome.values[0])
             return paciente
 
-    def valida_medico(self, oracle:OracleQueries, cnpj:str=None) -> Medico:
-        if self.ctrl_medico.verifica_existencia_medico(oracle, cnpj):
-            print(f"O CNPJ {cnpj} informado não existe na base.")
+    def valida_medico(self, oracle:OracleQueries, crm:str=None) -> Medico:
+        if self.ctrl_medico.verifica_existencia_medico(oracle, crm):
+            print(f"O CRM {crm} informado não existe na base.")
             return None
         else:
             oracle.connect()
             # Recupera os dados do novo medico criado transformando em um DataFrame
-            df_medico = oracle.sqlToDataFrame(f"select cnpj, razao_social, nome_fantasia from medicos where cnpj = {cnpj}")
+            df_medico = oracle.sqlToDataFrame(f"select crm, nome from medicos where crm = {crm}")
             # Cria um novo objeto medico
-            medico = Medico(df_medico.cnpj.values[0], df_medico.razao_social.values[0], df_medico.nome_fantasia.values[0])
+            medico = Medico(df_medico.crm.values[0], df_medico.nome.values[0])
             return medico
