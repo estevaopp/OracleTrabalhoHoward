@@ -2,7 +2,7 @@ from datetime import date
 from model.pacientes import Paciente
 from model.medicos import Medico
 
-class Agendameto:
+class Agendamento:
     def __init__(self, 
                  codigo_agendamento:int=None,
                  data_agendamento:date=None,

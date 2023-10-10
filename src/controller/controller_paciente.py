@@ -21,7 +21,7 @@ class Controller_Paciente:
             # Solicita ao usuario o novo telefone
             telefone = input("Telefone (Novo): ")
             # Insere e persiste o novo paciente
-            oracle.write(f"insert into pacientes values ('{cpf}', '{nome}', '{telefone})")
+            oracle.write(f"insert into pacientes values ('{cpf}', '{nome}', '{telefone}')")
             # Recupera os dados do novo paciente criado transformando em um DataFrame
             df_paciente = oracle.sqlToDataFrame(f"select cpf, nome, telefone from pacientes where cpf = '{cpf}'")
             # Cria um novo objeto Paciente

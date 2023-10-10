@@ -2,13 +2,13 @@ from utils import config
 from utils.splash_screen import SplashScreen
 from reports.relatorios import Relatorio
 from controller.controller_paciente import Controller_Paciente
-from controller.controller_medico import Controller_
+from controller.controller_medico import Controller_Medico
 from controller.controller_agendamento import Controller_Agendamento
 
 tela_inicial = SplashScreen()
 relatorio = Relatorio()
 ctrl_paciente = Controller_Paciente()
-ctrl_medico = Controller_()
+ctrl_medico = Controller_Medico()
 ctrl_agendamento = Controller_Agendamento()
 
 def reports(opcao_relatorio:int=0):
