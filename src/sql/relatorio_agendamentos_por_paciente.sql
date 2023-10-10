@@ -1,16 +1,19 @@
 with sumariza_agendamentos as (
-    select crm
+    select cpf
          , count(1) as qtd_agendamentos
       from agendamentos
-      group by crm
+      group by cpf
 )
 
-select f.nome as medico
+select e.nome as paciente
      , sp.qtd_agendamentos
+     , sum(f.valor_consulta)
   from agendamentos p
   inner join sumariza_agendamentos sp
-  on p.crm = sp.crm
+  on p.cpf = sp.cpf
   inner join medicos f
   on p.crm = f.crm
-  group by sp.qtd_agendamentos, f.nome
+  inner join pacientes e
+  on p.cpf = e.cpf
+  group by sp.qtd_agendamentos, e.nome
   order by f.nome

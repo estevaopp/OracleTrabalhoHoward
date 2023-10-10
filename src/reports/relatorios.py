@@ -7,8 +7,8 @@ class Relatorio:
             self.query_relatorio_agendamentos = f.read()
 
         # Abre o arquivo com a consulta e associa a um atributo da classe
-        with open("/home/labdatabase/GitHub/OracleTrabalhoHoward/src/sql/relatorio_agendamentos_por_medico.sql") as f:
-            self.query_relatorio_agendamentos_por_medico = f.read()
+        with open("/home/labdatabase/GitHub/OracleTrabalhoHoward/src/sql/relatorio_agendamentos_por_paciente.sql") as f:
+            self.query_relatorio_agendamentos_por_paciente = f.read()
 
         # Abre o arquivo com a consulta e associa a um atributo da classe
         with open("/home/labdatabase/GitHub/OracleTrabalhoHoward/src/sql/relatorio_pacientes.sql") as f:
@@ -26,12 +26,12 @@ class Relatorio:
         print(oracle.sqlToDataFrame(self.query_relatorio_agendamentos))
         input("Pressione Enter para Sair do Relatório de Agendamentos")
 
-    def get_relatorio_agendamentos_por_medico(self):
+    def get_relatorio_agendamentos_por_paciente(self):
         # Cria uma nova conexão com o banco que permite alteração
         oracle = OracleQueries()
         oracle.connect()
         # Recupera os dados transformando em um DataFrame
-        print(oracle.sqlToDataFrame(self.query_relatorio_agendamentos_por_medico))
+        print(oracle.sqlToDataFrame(self.query_relatorio_agendamentos_por_paciente))
         input("Pressione Enter para Sair do Relatório de Medicos")
 
     def get_relatorio_pacientes(self):

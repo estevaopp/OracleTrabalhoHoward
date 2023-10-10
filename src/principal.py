@@ -14,7 +14,7 @@ ctrl_agendamento = Controller_Agendamento()
 def reports(opcao_relatorio:int=0):
 
     if opcao_relatorio == 1:
-        relatorio.get_relatorio_agendamentos_por_medico()            
+        relatorio.get_relatorio_agendamentos_por_paciente()            
     elif opcao_relatorio == 2:
         relatorio.get_relatorio_agendamentos()
     elif opcao_relatorio == 3:
