@@ -16,4 +16,4 @@ select e.nome as paciente
   inner join pacientes e
   on p.cpf = e.cpf
   group by sp.qtd_agendamentos, e.nome
-  order by f.nome
+  order by e.nome
