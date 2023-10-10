@@ -75,7 +75,8 @@ class Controller_Paciente:
             # Recupera os dados do novo paciente criado transformando em um DataFrame
             df_paciente = oracle.sqlToDataFrame(f"select cpf, nome, telefone from pacientes where cpf = {cpf}")
             # Revome o paciente da tabela
-            oracle.write(f"delete from pacientes where cpf = {cpf}")            
+            oracle.write(f"delete from agendamentos where cpf = {cpf}")
+            oracle.write(f"delete from pacientes where cpf = {cpf}")
             # Cria um novo objeto Paciente para informar que foi removido
             paciente_excluido = Paciente(df_paciente.cpf.values[0], df_paciente.nome.values[0], df_paciente.telefone.values[0])
             # Exibe os atributos do paciente excluído

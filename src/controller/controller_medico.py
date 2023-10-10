@@ -75,6 +75,7 @@ class Controller_Medico:
             # Recupera os dados do novo medico criado transformando em um DataFrame
             df_medico = oracle.sqlToDataFrame(f"select crm, nome, valor_consulta from medicos where crm = {crm}")
             # Revome o medico da tabela
+            oracle.write(f"delete from agendamentos where crm = {crm}")    
             oracle.write(f"delete from medicos where crm = {crm}")            
             # Cria um novo objeto medico para informar que foi removido
             medico_excluido = Medico(df_medico.crm.values[0], df_medico.nome.values[0], df_medico.valor_consulta.values[0])
