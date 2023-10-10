@@ -7,7 +7,7 @@ with sumariza_agendamentos as (
 
 select e.nome as paciente
      , sp.qtd_agendamentos
-     , sum(f.valor_consulta)
+     , sum(f.valor_consulta) as CustoConsultas
   from agendamentos p
   inner join sumariza_agendamentos sp
   on p.cpf = sp.cpf
