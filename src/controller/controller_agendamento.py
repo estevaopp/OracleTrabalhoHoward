@@ -120,17 +120,13 @@ class Controller_Agendamento:
             opcao_excluir = input(f"Tem certeza que deseja excluir o agendamento {codigo_agendamento} [S ou N]: ")
             if opcao_excluir.lower() == "s":
                 print("Atenção, caso o agendamento possua itens, também serão excluídos!")
-                opcao_excluir = input(f"Tem certeza que deseja excluir o agendamento {codigo_agendamento} [S ou N]: ")
-                if opcao_excluir.lower() == "s":
                     # Revome o produto da tabela
-                    oracle.write(f"delete from itens_agendamento where codigo_agendamento = {codigo_agendamento}")
-                    print("Itens do agendamento removidos com sucesso!")
-                    oracle.write(f"delete from agendamentos where codigo_agendamento = {codigo_agendamento}")
-                    # Cria um novo objeto Produto para informar que foi removido
-                    agendamento_excluido = Agendamento(df_agendamento.codigo_agendamento.values[0], df_agendamento.data_agendamento.values[0], paciente, medico)
-                    # Exibe os atributos do produto excluído
-                    print("Agendamento Removido com Sucesso!")
-                    print(agendamento_excluido.to_string())
+                oracle.write(f"delete from agendamentos where codigo_agendamento = {codigo_agendamento}")
+                # Cria um novo objeto Produto para informar que foi removido
+                agendamento_excluido = Agendamento(df_agendamento.codigo_agendamento.values[0], df_agendamento.data_agendamento.values[0], paciente, medico)
+                # Exibe os atributos do produto excluído
+                print("Agendamento Removido com Sucesso!")
+                print(agendamento_excluido.to_string())
         else:
             print(f"O código {codigo_agendamento} não existe.")
 
