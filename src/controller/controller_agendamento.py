@@ -32,8 +32,8 @@ class Controller_Agendamento:
         if medico == None:
             return None
 
-        ano = int(input("Escreva o mês: "))
-        mes = int(input("Escreva o ano: "))
+        ano = int(input("Escreva o ano: "))
+        mes = int(input("Escreva o mês: "))
         dia = int(input("Escreva o dia: "))
         hora = int(input("Escreva o hora: "))
         data_hoje = datetime(ano,mes,dia,hora)
@@ -90,8 +90,8 @@ class Controller_Agendamento:
             if medico == None:
                 return None
 
-            ano = int(input("Escreva o mês: "))
-            mes = int(input("Escreva o ano: "))
+            ano = int(input("Escreva o ano: "))
+            mes = int(input("Escreva o mês: "))
             dia = int(input("Escreva o dia: "))
             hora = int(input("Escreva o hora: "))
             data_hoje = datetime(ano,mes,dia,hora)
