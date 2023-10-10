@@ -32,10 +32,10 @@ class Controller_Agendamento:
         if medico == None:
             return None
 
-        ano = input("Escreva o mês")
-        mes = input("Escreva o ano")
-        dia = input("Escreva o dia")
-        hora = input("Escreva o mês")
+        ano = int(input("Escreva o mês: "))
+        mes = int(input("Escreva o ano: "))
+        dia = int(input("Escreva o dia: "))
+        hora = int(input("Escreva o hora: "))
         data_hoje = datetime(ano,mes,dia,hora)
 
         # Recupera o cursos para executar um bloco PL/SQL anônimo
@@ -90,10 +90,10 @@ class Controller_Agendamento:
             if medico == None:
                 return None
 
-            ano = input("Escreva o mês")
-            mes = input("Escreva o ano")
-            dia = input("Escreva o dia")
-            hora = input("Escreva o mês")
+            ano = int(input("Escreva o mês: "))
+            mes = int(input("Escreva o ano: "))
+            dia = int(input("Escreva o dia: "))
+            hora = int(input("Escreva o hora: "))
             data_hoje = datetime(ano,mes,dia,hora)
 
             # Atualiza a descrição do produto existente
