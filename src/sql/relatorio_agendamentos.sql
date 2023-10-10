@@ -1,7 +1,7 @@
 select p.codigo_agendamento
      , p.data_agendamento
      , c.nome as paciente
-     , nvl(f.nome) as medico
+     , f.nome as medico
   from agendamentos p
   inner join pacientes c
   on p.cpf = c.cpf
