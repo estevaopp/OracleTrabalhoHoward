@@ -5,7 +5,7 @@ from controller.controller_paciente import Controller_Paciente
 from model.medicos import Medico
 from controller.controller_medico import Controller_Medico
 from conexion.oracle_queries import OracleQueries
-from datetime import date
+from datetime import datetime
 
 class Controller_Agendamento:
     def __init__(self):
@@ -32,7 +32,11 @@ class Controller_Agendamento:
         if medico == None:
             return None
 
-        data_hoje = date.today()
+        ano = input("Escreva o mês")
+        mes = input("Escreva o ano")
+        dia = input("Escreva o dia")
+        hora = input("Escreva o mês")
+        data_hoje = datetime(ano,mes,dia,hora)
 
         # Recupera o cursos para executar um bloco PL/SQL anônimo
         cursor = oracle.connect()
@@ -86,7 +90,11 @@ class Controller_Agendamento:
             if medico == None:
                 return None
 
-            data_hoje = date.today()
+            ano = input("Escreva o mês")
+            mes = input("Escreva o ano")
+            dia = input("Escreva o dia")
+            hora = input("Escreva o mês")
+            data_hoje = datetime(ano,mes,dia,hora)
 
             # Atualiza a descrição do produto existente
             oracle.write(f"update agendamentos set cpf = '{paciente.get_CPF()}', crm = '{medico.get_CRM()}', data_agendamento = to_date('{data_hoje}','yyyy-mm-dd') where codigo_agendamento = {codigo_agendamento}")
