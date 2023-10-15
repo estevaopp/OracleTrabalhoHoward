@@ -1,6 +1,6 @@
 # Exemplo de Sistema em Python fazendo CRUD no Oracle
 
-Esse sistema de exemplo é composto por um conjunto de tabelas que representam agendamentos de vendas, contendo tabelas como: pacientes, medicos, produtos, agendamentos e itens de agendamento.
+Esse sistema de exemplo é composto por um conjunto de tabelas que representam agendamentos de consultas, contendo tabelas como: pacientes, medicos, agendamentos.
 
 O sistema exige que as tabelas existam, então basta executar o script Python a seguir para criação das tabelas e preenchimento de dados de exemplos:
 ```shell
@@ -18,8 +18,8 @@ Para que possa testar as conexões com o banco de dados Oracle e o módulo Conex
 ```
 
 ## Organização
-- [diagrams](diagrams): Nesse diretório está o [diagrama relacional](diagrams/DIAGRAMA_RELACIONAL_AGENDAMENTOS.pdf) (lógico) do sistema.
-    * O sistema possui cinco entidades: PRODUTOS, PACIENTES, MEDICOS, AGENDAMENTOS e ITENS_AGENDAMENTO
+- [diagrams](diagrams): Nesse diretório está o [diagrama relacional](diagrams/SistemaConsulta.pdf) (lógico) do sistema.
+    * O sistema possui três entidades: PACIENTES, MEDICOS, AGENDAMENTOS
 - [sql](sql): Nesse diretório estão os scripts para criação das tabelas e inserção de dados fictícios para testes do sistema
     * Certifique-se de que o usuário do banco possui todos os privilégios antes de executar os scripts de criação, caso ocorra erro, execute o comando a seguir com o superusuário via SQL Developer: `GRANT ALL PRIVILEGES TO LABDATABASE;`
     * [create_tables_agendamentos.sql](sql/create_tables_agendamentos.sql): script responsável pela criação das tabelas, relacionamentos e criação de permissão no esquema LabDatabase.
@@ -123,7 +123,3 @@ Para que possa testar as conexões com o banco de dados Oracle e o módulo Conex
   export PATH=$PATH:$ORACLE_HOME/bin
   export PATH
   ```
-
-## Contato
-- [LinkedIn](https://linkedin.com/in/howardroatti)
-- [E-Mail](mailto:howardcruzroatti@gmail.com)
